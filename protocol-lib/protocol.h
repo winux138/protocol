@@ -3,6 +3,9 @@
 #include <stddef.h>
 #include <stdint.h>
 
+#include "animal.h"
+#include "car.h"
+
 enum PROTOCOL_RESULTS {
   PROTOCOL_OK = 0,
   PROTOCOL_NOK = 1,

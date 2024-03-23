@@ -2,6 +2,8 @@
 
 #include <stdint.h>
 
+#define PROTOCOL_CAR 2
+
 struct car {
   char brand[16];
   char model[16];
