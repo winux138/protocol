@@ -1,4 +1,3 @@
-workspace = { members = ["src/protocol-rs"] }
 [package]
 name = "protocol-sys"
 version = "0.1.0"
