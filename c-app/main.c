@@ -15,7 +15,7 @@ int main(void) {
   char encoded_frame[512];
   protocol_encode(&frame, encoded_frame, 512);
 
-  printf("Hello, World!\n");
   printf("Encoded frame is: '%s'\n", encoded_frame);
+
   return 0;
 }
