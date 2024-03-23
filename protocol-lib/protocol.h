@@ -1,5 +1,6 @@
 #pragma once
 
+#include <stddef.h>
 #include <stdint.h>
 
 enum PROTOCOL_RESULTS {
@@ -21,3 +22,4 @@ struct protocol_frame {
 } __attribute__((packed)); ;
 
 int protocol_encode(struct protocol_frame *p_frame, char *out_encoded_buffer, size_t encoded_buffer_size);
+int protocol_decode(struct protocol_frame *out_p_frame, const char *encoded_frame, size_t encoded_frame_len);
