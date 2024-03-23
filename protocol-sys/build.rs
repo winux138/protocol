@@ -1,6 +1,9 @@
 use std::env;
 use std::path::PathBuf;
 
+// TODO: Use this setup instead
+// https://rust-lang.github.io/rust-bindgen/non-system-libraries.html
+
 fn main() {
     cc::Build::new()
         .file("protocol-lib/base64.c")
