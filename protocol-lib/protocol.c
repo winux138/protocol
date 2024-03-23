@@ -38,6 +38,26 @@ int protocol_encode(struct protocol_frame *p_frame, char *out_encoded_buffer, si
   return PROTOCOL_OK;
 }
 
-int protocol_decode(void) {
+int protocol_decode(struct protocol_frame *out_p_frame, const char *encoded_frame, size_t encoded_frame_len) {
+  if (out_p_frame == NULL) {
+    return PROTOCOL_ERROR_NO_FRAME;
+  }
+
+  if (encoded_frame== NULL) {
+    return PROTOCOL_ERROR_NO_OUT;
+  }
+
+  if (out_p_frame->data == NULL) {
+    return PROTOCOL_ERROR_NO_DATA;
+  }
+
+  int raw_decoded_len = 0;
+  uint8_t *raw_decoded = unbase64(encoded_frame, encoded_frame_len, &raw_decoded_len);
+
+  if (raw_decoded_len < 10) {
+    free(raw_decoded);
+    return PROTOCOL_ERROR_INVALID_ENCODED_FRAME;
+  }
+
   return PROTOCOL_OK;
 }
