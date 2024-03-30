@@ -1,20 +1,29 @@
-pub trait ProtocolFrame {}
+pub use protocol_sys::{animal, car};
 
-pub fn encode(frame: &dyn ProtocolFrame) {
-    println!("Encoding..");
-}
+// TODO: Use Result intead
+pub fn encode(input: &mut protocol_sys::animal) -> Option<String> {
+    let mut encoded_frame = [0i8; 256];
+    let mut_ptr: *mut protocol_sys::animal = input;
+    let u8_ptr = mut_ptr as *mut u8;
+    let mut protocol_frame = protocol_sys::protocol_frame {
+        data: u8_ptr,
+        data_size: std::mem::size_of::<protocol_sys::animal>()
+            .try_into()
+            .unwrap_or_default(),
+        ..Default::default()
+    };
 
-// pub fn add(left: usize, right: usize) -> usize {
-//     left + right
-// }
+    let res = unsafe {
+        protocol_sys::protocol_encode(
+            &mut protocol_frame,
+            encoded_frame.as_mut_ptr(),
+            encoded_frame.len(),
+        )
+    };
+    if res != 0 {
+        return None;
+    }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    // #[test]
-    // fn it_works() {
-    //     let result = add(2, 2);
-    //     assert_eq!(result, 4);
-    // }
+    let encoded_frame: Vec<u8> = encoded_frame.iter().map(|e| *e as u8).collect();
+    Some(String::from_utf8(encoded_frame).unwrap_or_default())
 }
