@@ -1,12 +1,16 @@
-use protocol_rs;
-
-#[derive(Default)]
-struct Frame(());
-
-impl protocol_rs::ProtocolFrame for Frame {}
+pub use protocol_rs;
 
 fn main() {
-    let frame = Frame::default();
-    protocol_rs::encode(&frame);
     println!("Hello, world!");
+    let mut animal = protocol_rs::animal {
+        age: 1,
+        legs: 2,
+        ..Default::default()
+    };
+
+    if let Some(encoded_frame) = protocol_rs::encode(&mut animal) {
+        println!("Encoded frame is: '{encoded_frame}'");
+    } else {
+        println!("Could not encode the frame");
+    }
 }
