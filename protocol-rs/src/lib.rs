@@ -1,5 +1,6 @@
 use protocol_sys::protocol_frame;
 pub use protocol_sys::{animal, car};
+pub use protocol_sys::{PROTOCOL_ANIMAL, PROTOCOL_CAR};
 
 pub struct ProtocolFrame {
     protocol_frame: protocol_frame,
