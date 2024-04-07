@@ -61,6 +61,7 @@ impl ProtocolFrame {
 
 // TODO: Use Result intead
 pub fn encode(input: &mut protocol_sys::animal) -> Option<String> {
+    // TODO: Replace with ProtocolFrame::Default()
     let mut encoded_frame = [0i8; 256];
     let mut_ptr: *mut protocol_sys::animal = input;
     let u8_ptr = mut_ptr as *mut u8;
