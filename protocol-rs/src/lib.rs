@@ -34,6 +34,14 @@ impl ProtocolFrame {
 
         s
     }
+
+    pub fn ts(&self) -> i64 {
+        self.protocol_frame.ts
+    }
+
+    pub fn id(&self) -> u8 {
+        self.protocol_frame.id
+    }
 }
 
 // TODO: Use Result intead
