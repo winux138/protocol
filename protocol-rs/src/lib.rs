@@ -70,6 +70,7 @@ pub fn encode(input: &mut protocol_sys::animal) -> Option<String> {
         data_size: std::mem::size_of::<protocol_sys::animal>()
             .try_into()
             .unwrap_or_default(),
+        id: PROTOCOL_ANIMAL.try_into().unwrap_or_default(),
         ..Default::default()
     };
 
