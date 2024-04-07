@@ -18,6 +18,20 @@ impl Default for ProtocolFrame {
     }
 }
 
+impl TryFrom<ProtocolFrame> for animal {
+    type Error = &'static str;
+
+    fn try_from(value: ProtocolFrame) -> Result<Self, Self::Error> {
+        if value.protocol_frame.id == PROTOCOL_ANIMAL.try_into().unwrap_or_default() {
+            let v = unsafe {std::slice::from_raw_parts(value.protocol_frame.data, 18)};
+            let (head, body, _tail) = unsafe { v.align_to::<animal>() }; 
+            assert!(head.is_empty(), "Data was not aligned");
+            return Ok(body[0]);
+        }
+        Err("Expected self.id = PROTOCOL_ANIMAL, got: {value.id}")
+    }
+}
+
 impl ProtocolFrame {
     pub fn new(encoded_frame: &str) -> Self {
         let mut s = ProtocolFrame::default();
