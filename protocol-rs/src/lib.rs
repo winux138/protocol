@@ -5,6 +5,18 @@ pub struct ProtocolFrame {
     protocol_frame: protocol_frame,
 }
 
+impl Default for ProtocolFrame {
+    fn default() -> Self {
+        Self {
+            protocol_frame: protocol_frame {
+                data: Box::new([0u8; 255]).as_mut_ptr(),
+                data_size: 255,
+                ..Default::default()
+            },
+        }
+    }
+}
+
 // TODO: Use Result intead
 pub fn encode(input: &mut protocol_sys::animal) -> Option<String> {
     let mut encoded_frame = [0i8; 256];
