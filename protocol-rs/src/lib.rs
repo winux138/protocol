@@ -1,4 +1,9 @@
+use protocol_sys::protocol_frame;
 pub use protocol_sys::{animal, car};
+
+pub struct ProtocolFrame {
+    protocol_frame: protocol_frame,
+}
 
 // TODO: Use Result intead
 pub fn encode(input: &mut protocol_sys::animal) -> Option<String> {
