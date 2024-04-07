@@ -17,6 +17,25 @@ impl Default for ProtocolFrame {
     }
 }
 
+impl ProtocolFrame {
+    pub fn new(encoded_frame: &str) -> Self {
+        let mut s = ProtocolFrame::default();
+
+        let res = unsafe {
+            protocol_sys::protocol_decode(
+                &mut s.protocol_frame,
+                encoded_frame.as_ptr() as *const i8,
+                encoded_frame.len(),
+            )
+        };
+        if res != 0 {
+            println!("An error occured in the call to protocol_sys::protocol_decode()");
+        }
+
+        s
+    }
+}
+
 // TODO: Use Result intead
 pub fn encode(input: &mut protocol_sys::animal) -> Option<String> {
     let mut encoded_frame = [0i8; 256];
