@@ -84,6 +84,6 @@ pub fn encode(input: &mut protocol_sys::animal) -> Option<String> {
         return None;
     }
 
-    let encoded_frame: Vec<u8> = encoded_frame.iter().map(|e| *e as u8).collect();
+    let encoded_frame: Vec<u8> = encoded_frame.iter().filter(|e| **e != 0).map(|e| *e as u8).collect();
     Some(String::from_utf8(encoded_frame).unwrap_or_default())
 }
