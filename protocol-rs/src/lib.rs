@@ -32,6 +32,19 @@ impl TryFrom<ProtocolFrame> for animal {
     }
 }
 
+impl TryFrom<ProtocolFrame> for car {
+    type Error = &'static str;
+
+    fn try_from(value: ProtocolFrame) -> Result<Self, Self::Error> {
+        if value.protocol_frame.id == PROTOCOL_CAR.try_into().unwrap_or_default() {
+            return Ok(Self {
+                ..Default::default()
+            });
+        }
+        Err("Expected self.id = PROTOCOL_CAR, got: {value.id}")
+    }
+}
+
 impl ProtocolFrame {
     pub fn new(encoded_frame: &str) -> Self {
         let mut s = ProtocolFrame::default();
