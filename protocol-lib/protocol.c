@@ -38,17 +38,13 @@ int protocol_encode(struct protocol_frame *p_frame, char *out_encoded_buffer, si
   return PROTOCOL_OK;
 }
 
-int protocol_decode(struct protocol_frame *out_p_frame, const char *encoded_frame, size_t encoded_frame_len) {
-  if (out_p_frame == NULL) {
+int protocol_decode( void(* decoded_callback)(struct protocol_frame *out_p_frame), const char *encoded_frame, size_t encoded_frame_len) {
+  if (decoded_callback == NULL) {
     return PROTOCOL_ERROR_NO_FRAME;
   }
 
   if (encoded_frame== NULL) {
     return PROTOCOL_ERROR_NO_OUT;
-  }
-
-  if (out_p_frame->data == NULL) {
-    return PROTOCOL_ERROR_NO_DATA;
   }
 
   int raw_decoded_len = 0;
@@ -59,8 +55,8 @@ int protocol_decode(struct protocol_frame *out_p_frame, const char *encoded_fram
     return PROTOCOL_ERROR_INVALID_ENCODED_FRAME;
   }
 
-  memcpy(out_p_frame, raw_decoded, 10);
-  memcpy(out_p_frame->data, &raw_decoded[10], raw_decoded_len);
+  decoded_callback((struct protocol_frame *)raw_decoded);
+  free(raw_decoded);
 
   return PROTOCOL_OK;
 }
