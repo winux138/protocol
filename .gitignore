@@ -1,3 +1,4 @@
 app-in-rust/target
 protocol-rs/target
 protocol-sys/target
+c-app/a.out
