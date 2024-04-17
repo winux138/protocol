@@ -62,3 +62,12 @@ void decoded_callback(struct protocol_frame *p_protocol_frame) {
         }
 }
 
+void animal_handler(struct animal *p_animal) {
+        printf("It is an PROTOCOL_ANIMAL!\n");
+        printf("struct animal {\n");
+        printf("        name: %s\n",p_animal->name);
+        printf("        age: %d\n", p_animal->age);
+        printf("        legs: %d\n", p_animal->legs);
+        printf("};\n");
+}
+
