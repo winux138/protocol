@@ -4,6 +4,10 @@
 
 #include "protocol-lib/protocol.h"
 
+void decoded_callback(struct protocol_frame *p_protocol_frame);
+void animal_handler(struct animal *p_animal);
+void car_handler(struct car *p_car);
+
 int main(void) {
         struct animal animal = {
                 .name = "",
@@ -36,3 +40,25 @@ int main(void) {
 
         return 0;
 }
+
+/* Internal functions */
+
+void decoded_callback(struct protocol_frame *p_protocol_frame) {
+        if (p_protocol_frame == NULL) {
+                printf("%s(): Got a NULL ptr\n", __func__);
+                return;
+        }
+
+        switch (p_protocol_frame->id) {
+                case PROTOCOL_ANIMAL:
+                        animal_handler((struct animal *)p_protocol_frame->data);
+                        break;
+                case PROTOCOL_CAR:
+                        car_handler((struct car *)p_protocol_frame->data);
+                        break;
+                default:
+                        printf("%s(): Unknown frame id: %u\n", __func__, p_protocol_frame->id);
+                        break;
+        }
+}
+
