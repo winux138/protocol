@@ -59,7 +59,15 @@ int protocol_decode(
                 return PROTOCOL_ERROR_INVALID_ENCODED_FRAME;
         }
 
-        decoded_callback((struct protocol_frame *)raw_decoded);
+        // TODO: Make this in a clean and safe way
+        struct protocol_frame decoded_frame = {
+                .ts = ((struct protocol_frame *)raw_decoded)->ts,
+                .id = ((struct protocol_frame *)raw_decoded)->id,
+                .data_size = ((struct protocol_frame *)raw_decoded)->data_size,
+                .data = &raw_decoded[10],
+        };
+
+        decoded_callback(&decoded_frame);
         free(raw_decoded);
 
         return PROTOCOL_OK;
