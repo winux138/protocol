@@ -14,16 +14,36 @@ int main(void) {
                 .age = 1,
                 .legs = 2,
         };
-        struct protocol_frame frame = {.id = 1,
+        struct protocol_frame animal_frame = {
+                .id = 1,
                 .ts = 1337,
                 .data_size = sizeof(animal),
-                .data = (uint8_t *)&animal};
+                .data = (uint8_t *)&animal
+        };
+
+        struct car car = {
+                .brand = "Brand A",
+                .model = "Model B",
+                .horsepower = 100,
+                .max_speed = 200,
+        };
+        struct protocol_frame car_frame = {
+                .id = 2,
+                .ts = 1338,
+                .data_size = sizeof(car),
+                .data = (uint8_t *)&car
+        };
 
         char encoded_frame[512];
-        protocol_encode(&frame, encoded_frame, 512);
 
+        protocol_encode(&animal_frame, encoded_frame, 512);
         printf("Encoded frame is: '%s'\n", encoded_frame);
+        protocol_decode(decoded_callback, encoded_frame, strnlen(encoded_frame, 512));
 
+        memset(encoded_frame, 0, 512);
+
+        protocol_encode(&car_frame, encoded_frame, 512);
+        printf("Encoded frame is: '%s'\n", encoded_frame);
         protocol_decode(decoded_callback, encoded_frame, strnlen(encoded_frame, 512));
 
         return 0;
