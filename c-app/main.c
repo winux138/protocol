@@ -71,3 +71,13 @@ void animal_handler(struct animal *p_animal) {
         printf("};\n");
 }
 
+void car_handler(struct car *p_car) {
+        printf("It is an PROTOCOL_CAR!\n");
+        printf("struct car {\n");
+        printf("        brand: %s\n",p_car->brand);
+        printf("        model: %s\n",p_car->model);
+        printf("        horsepower: %d\n", p_car->horsepower);
+        printf("        max_speed: %d\n", p_car->max_speed);
+        printf("};\n");
+}
+
