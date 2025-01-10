@@ -1,4 +1,5 @@
 app-in-rust/target
 protocol-rs/target
 protocol-sys/target
+serde-protocol/target
 c-app/a.out
