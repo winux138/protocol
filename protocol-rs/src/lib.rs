@@ -23,8 +23,8 @@ impl TryFrom<ProtocolFrame> for animal {
 
     fn try_from(value: ProtocolFrame) -> Result<Self, Self::Error> {
         if value.protocol_frame.id == PROTOCOL_ANIMAL.try_into().unwrap_or_default() {
-            let v = unsafe {std::slice::from_raw_parts(value.protocol_frame.data, 18)};
-            let (head, body, _tail) = unsafe { v.align_to::<animal>() }; 
+            let v = unsafe { std::slice::from_raw_parts(value.protocol_frame.data, 18) };
+            let (head, body, _tail) = unsafe { v.align_to::<animal>() };
             assert!(head.is_empty(), "Data was not aligned");
             return Ok(body[0]);
         }
@@ -45,13 +45,19 @@ impl TryFrom<ProtocolFrame> for car {
     }
 }
 
+unsafe extern "C" fn decoded_callback(_out_p_frame: *mut protocol_frame) {}
+
 impl ProtocolFrame {
     pub fn new(encoded_frame: &str) -> Self {
         let mut s = ProtocolFrame::default();
 
         let res = unsafe {
+            // FIXME: The callback should probably be a closure and make a copy of the decoded
+            // frame, as it is free'd after the callback returns.
+            // BE VERY CAREFUL TO STILL BE THREADSAFE !!!
             protocol_sys::protocol_decode(
-                &mut s.protocol_frame,
+                Some(decoded_callback),
+                // &mut s.protocol_frame,
                 encoded_frame.as_ptr() as *const i8,
                 encoded_frame.len(),
             )
@@ -98,6 +104,10 @@ pub fn encode(input: &mut protocol_sys::animal) -> Option<String> {
         return None;
     }
 
-    let encoded_frame: Vec<u8> = encoded_frame.iter().filter(|e| **e != 0).map(|e| *e as u8).collect();
+    let encoded_frame: Vec<u8> = encoded_frame
+        .iter()
+        .filter(|e| **e != 0)
+        .map(|e| *e as u8)
+        .collect();
     Some(String::from_utf8(encoded_frame).unwrap_or_default())
 }

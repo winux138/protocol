@@ -7,27 +7,36 @@
     flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = {
-    flake-utils,
-    nixpkgs,
-    rust-overlay,
-    ...
-  }:
+  outputs =
+    {
+      flake-utils,
+      nixpkgs,
+      rust-overlay,
+      ...
+    }:
     flake-utils.lib.eachDefaultSystem (
-      system: let
-        overlays = [(import rust-overlay)];
+      system:
+      let
+        overlays = [ (import rust-overlay) ];
         pkgs = import nixpkgs {
           inherit system overlays;
         };
-      in {
-        devShells.default = with pkgs;
+      in
+      {
+        devShells.default =
+          with pkgs;
           mkShell {
             buildInputs = [
               openssl
               pkg-config
+              libclang
 
               (rust-bin.fromRustupToolchainFile ./rust-toolchain.toml)
             ];
+
+            env = {
+              LIBCLANG_PATH = "${pkgs.libclang.lib}/lib";
+            };
 
             shellHook = '''';
           };
